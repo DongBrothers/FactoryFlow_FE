@@ -1,0 +1,38 @@
+name: cd
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:   # 수동 실행 (같은 main 을 다시 배포)
+
+permissions:
+  contents: read
+  id-token: write
+
+# 배포는 한 번에 하나씩. 업로드 중간에 취소되지 않게 대기시킨다
+concurrency:
+  group: cd
+  cancel-in-progress: false
+
+jobs:
+  # Repository variable S3_BUCKET 이 있을 때만 실행 (AWS 역할, 시크릿 준비 후)
+  deploy:
+    if: vars.S3_BUCKET != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run build
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - env:
+          BUCKET: ${{ vars.S3_BUCKET }}
+          DIST_ID: ${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}
+        run: |
+          # index.html 은 매번 새로 받게, 나머지(assets/ 는 파일명에 해시)는 기본 캐시
+          aws s3 sync dist/ "s3://$BUCKET" --delete --exclude index.html
+          aws s3 cp dist/index.html "s3://$BUCKET/index.html" --cache-control no-cache
+          aws cloudfront create-invalidation --distribution-id "$DIST_ID" --paths "/*"

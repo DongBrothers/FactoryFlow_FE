@@ -14,7 +14,7 @@
   - S3 버킷 `factoryflow-fe-dev` (서울, 퍼블릭 차단, OAC)
   - CloudFront `d91qb0hcq0p32.cloudfront.net` (flat-rate 무료 플랜). 동작 2개: 기본(*) → S3, `/api/*` → `api.factoryflow.shop` HTTPS (CachingDisabled + AllViewerExceptHostHeader)
   - SPA 새로고침: 아래 6장의 "403·404 → /index.html" 대신 CloudFront Function `spa-index`(기본 동작 뷰어 요청, 점 없는 경로 → `/index.html`). 오류 페이지 방식은 백엔드의 403·404 까지 바꿔 버려서 쓰지 않는다
-- 남은 것: CI/CD (IAM 역할 `ff-fe-deploy`, GitHub 시크릿·변수), 그다음 1번 기능 코드
+- 남은 것: CI/CD (IAM 역할 `ff-github-fe-deploy` (백엔드는 `ff-github-deploy`, 권한을 나누려고 따로 만듦), GitHub 시크릿·변수), 그다음 1번 기능 코드
 
 ## 해야 할 일 (순서)
 
