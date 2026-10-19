@@ -1,0 +1,21 @@
+name: pr-body
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  explain:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          BODY: ${{ github.event.pull_request.body }}
+        run: |
+          # 명세 줄과 closes 줄은 채워도 "왜" 가 아니다. 내용과 상관없이 빼고, 남은 글이 있어야 작성한 것으로 본다
+          why=$(echo "$BODY" | awk '/^## 왜/{f=1;next} /^## /{f=0} f' \
+            | grep -vE '^\s*$|^\s*<!--|-->\s*$|^- 명세:|^- closes #')
+          [ -n "$why" ] || { echo "'## 왜' 섹션을 직접 작성하세요"; exit 1; }
+          echo "$BODY" | grep -q '\- \[x\] 이 변경을 AI 없이' \
+            || { echo "'설명할 수 있다' 체크박스를 확인하세요"; exit 1; }
