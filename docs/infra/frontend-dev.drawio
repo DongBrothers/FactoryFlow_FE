@@ -1,0 +1,109 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="fe-dev-infra" name="프론트 dev 인프라">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- 그룹 -->
+        <mxCell id="cloud" value="AWS Cloud" style="points=[];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=0;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="320" y="20" width="1060" height="770" as="geometry" />
+        </mxCell>
+        <mxCell id="useast1" value="us-east-1 (버지니아 북부)" style="points=[];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=0;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;strokeColor=#00A4A6;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="590" width="220" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="seoul" value="ap-northeast-2 (서울)" style="points=[];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;container=0;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_region;strokeColor=#00A4A6;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#147EBA;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="60" width="740" height="710" as="geometry" />
+        </mxCell>
+
+        <!-- AWS 밖 -->
+        <mxCell id="gabia" value="&lt;b&gt;가비아 DNS&lt;/b&gt; (factoryflow.shop)&lt;br&gt;api → ALB&lt;br&gt;dev → CloudFront (추가 대기)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;align=left;spacingLeft=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="240" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="user" value="사용자 (브라우저)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.users;" vertex="1" parent="1">
+          <mxGeometry x="100" y="320" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="github" value="&lt;b&gt;GitHub Actions&lt;/b&gt;&lt;br&gt;FactoryFlow_FE cd.yml&lt;br&gt;(예정)" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;fillColor=#f5f5f5;strokeColor=#999999;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="140" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- 글로벌 -->
+        <mxCell id="cf" value="&lt;b&gt;CloudFront&lt;/b&gt;&lt;br&gt;factoryflow-fe-dev (무료 요금제)&lt;br&gt;d91qb0hcq0p32.cloudfront.net" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;fillColor=#8C4FFF;resIcon=mxgraph.aws4.cloudfront;" vertex="1" parent="1">
+          <mxGeometry x="420" y="320" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="fn" value="&lt;b&gt;CloudFront Function&lt;/b&gt; spa-index&lt;br&gt;기본 (*) 동작 · 뷰어 요청&lt;br&gt;점 없는 경로 → /index.html" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="360" y="480" width="200" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="acm1" value="&lt;b&gt;ACM&lt;/b&gt;&lt;br&gt;factoryflow.shop, *.factoryflow.shop&lt;br&gt;(CloudFront용)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;fillColor=#DD344C;resIcon=mxgraph.aws4.certificate_manager_3;" vertex="1" parent="1">
+          <mxGeometry x="431" y="625" width="58" height="58" as="geometry" />
+        </mxCell>
+
+        <!-- 서울 -->
+        <mxCell id="s3" value="&lt;b&gt;S3&lt;/b&gt; factoryflow-fe-dev&lt;br&gt;퍼블릭 차단, OAC 로만 읽기&lt;br&gt;(빌드 결과 dist/)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;fillColor=#7AA116;resIcon=mxgraph.aws4.s3;" vertex="1" parent="1">
+          <mxGeometry x="720" y="140" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="iam" value="&lt;b&gt;IAM 역할&lt;/b&gt; (예정)&lt;br&gt;GitHub OIDC&lt;br&gt;S3 쓰기 · CloudFront 무효화" style="sketch=0;outlineConnect=0;fontColor=#666666;gradientColor=none;fillColor=#DD344C;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.role;opacity=50;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="153" width="78" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="alb" value="&lt;b&gt;ALB&lt;/b&gt; ff-alb&lt;br&gt;api.factoryflow.shop&lt;br&gt;HTTPS 443 (HTTP 80 → 301)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.application_load_balancer;" vertex="1" parent="1">
+          <mxGeometry x="720" y="400" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="ecs" value="&lt;b&gt;ECS&lt;/b&gt; gateway&lt;br&gt;→ auth · order · production&lt;br&gt;· inventory · purchase" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;fillColor=#ED7100;resIcon=mxgraph.aws4.ecs;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="400" width="78" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="acm2" value="&lt;b&gt;ACM&lt;/b&gt; (ALB용)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;fillColor=#DD344C;resIcon=mxgraph.aws4.certificate_manager_3;" vertex="1" parent="1">
+          <mxGeometry x="730" y="625" width="58" height="58" as="geometry" />
+        </mxCell>
+
+        <!-- 요청 흐름 -->
+        <mxCell id="e1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;" edge="1" parent="1" source="user" target="cf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="기본 (*)&lt;br&gt;OAC" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;" edge="1" parent="1" source="cf" target="s3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="/api/*&lt;br&gt;캐시 끔 · 헤더/쿠키 그대로" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;" edge="1" parent="1" source="cf" target="alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;strokeWidth=2;" edge="1" parent="1" source="alb" target="ecs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="" style="html=1;endArrow=none;dashed=1;strokeColor=#9673a6;" edge="1" parent="1" source="fn" target="cf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 인증서 · DNS -->
+        <mxCell id="e6" value="인증서" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="acm1" target="cf">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="340" y="654" />
+              <mxPoint x="340" y="359" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" value="인증서" style="html=1;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="acm2" target="alb">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="dev CNAME (대기)" style="html=1;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="gabia" target="cf">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 배포 (예정) -->
+        <mxCell id="e9" value="OIDC" style="html=1;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="github" target="iam">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" value="s3 sync" style="html=1;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;" edge="1" parent="1" source="iam" target="s3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="무효화 /*" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;dashed=1;strokeColor=#999999;fontColor=#666666;exitX=0.5;exitY=0;entryX=0.5;entryY=0;" edge="1" parent="1" source="iam" target="cf">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1119" y="100" />
+              <mxPoint x="459" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
