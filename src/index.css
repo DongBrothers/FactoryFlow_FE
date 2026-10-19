@@ -1,0 +1,34 @@
+/* 전역 기본값. 화면별 스타일은 *.module.css */
+:root {
+  --line: #d9dde3;
+  --primary: #2563eb;
+  font-family: 'Noto Sans KR', system-ui, sans-serif;
+  color: #1f2933;
+  background: #f5f7fa;
+}
+
+body {
+  margin: 0;
+}
+
+input {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font: inherit;
+}
+
+button {
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--primary);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
