@@ -14,7 +14,16 @@
   - S3 버킷 `factoryflow-fe-dev` (서울, 퍼블릭 차단, OAC)
   - CloudFront `d91qb0hcq0p32.cloudfront.net` (flat-rate 무료 플랜). 동작 2개: 기본(*) → S3, `/api/*` → `api.factoryflow.shop` HTTPS (CachingDisabled + AllViewerExceptHostHeader)
   - SPA 새로고침: 아래 6장의 "403·404 → /index.html" 대신 CloudFront Function `spa-index`(기본 동작 뷰어 요청, 점 없는 경로 → `/index.html`). 오류 페이지 방식은 백엔드의 403·404 까지 바꿔 버려서 쓰지 않는다
-- 남은 것: CI/CD (IAM 역할 `ff-github-fe-deploy` (백엔드는 `ff-github-deploy`, 권한을 나누려고 따로 만듦), GitHub 시크릿·변수), 그다음 1번 기능 코드
+- CI/CD 완료 (PR #2): `ci.yml`(PR 검사 check), `cd.yml`(main push → S3 sync + CloudFront 무효화), `pr-body.yml`(explain, "## 왜" 직접 작성)
+  - IAM 역할 `ff-github-fe-deploy` (백엔드는 `ff-github-deploy`, 권한을 나누려고 따로 만듦). 권한: 버킷 쓰기·지우기, 이 배포 무효화만
+  - **주의**: 이 저장소는 GitHub OIDC immutable subject 라서 신뢰 정책 sub 가 `repo:DongBrothers@339505241/FactoryFlow_FE@1409951739:ref:refs/heads/main` 이다. 콘솔 마법사가 만드는 `repo:DongBrothers/FactoryFlow_FE:...` 로는 AssumeRole 이 거절된다 (`gh api repos/{owner}/{repo}/actions/oidc/customization/sub` 로 확인)
+  - GitHub: 시크릿 `AWS_DEPLOY_ROLE_ARN`, 변수 `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`
+  - 저장소를 공개로 바꿈 (무료 요금제의 비공개 저장소는 보호 규칙이 적용되지 않아서, 백엔드도 공개). main 보호 규칙은 백엔드와 같은 classic 방식: PR 필수, 승인 0, 필수 검사 `check`·`explain`
+  - AI 리뷰는 화면 코드가 쌓인 뒤 프론트용 기준(security·quality)으로 추가하기로 함
+- 로그인 뼈대 (feat/login): React Router 7, Vitest 5, CSS Modules. `src/api.ts`(Access 메모리, 401 → 재발급 한 번 → 재시도, 동시 재발급 1회, 오류 토스트), `auth.tsx`(앱 시작 때 재발급 시도), `menu.ts`(역할별 메뉴·첫 화면), `Login`, `Layout`(역할 메뉴 밖 주소는 첫 화면으로), 업무 화면은 "준비 중"
+  - 로컬: `npm run dev` 의 `/api` 프록시가 dev 백엔드(`api.factoryflow.shop`)로 간다 (Origin 헤더를 빼서 CORS 검사를 피함). 로컬 gateway 는 `API_TARGET=http://localhost:8080 npm run dev`
+  - **dev 의 gateway CORS**: CloudFront 가 브라우저의 Origin 을 그대로 넘겨서, gateway `app.cors.allowed-origins`(`CORS_ALLOWED_ORIGINS`)에 `https://dev.factoryflow.shop` 이 없으면 로그인 POST 가 403. 백엔드 dev 설정(`APP_DEV_YML_GATEWAY`, 노션)에 넣어야 한다
+- 다음: 계정 활성화 화면 (백엔드 `auth.activation-mail.link-base-url` 을 `https://dev.factoryflow.shop/activate` 로), 그다음 9장 순서대로 화면
 
 ## 해야 할 일 (순서)
 

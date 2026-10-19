@@ -19,4 +19,5 @@ jobs:
         with: { node-version: 22, cache: npm }
       - run: npm ci
       - run: npm run lint
+      - run: npm test
       - run: npm run build   # tsc -b (타입 검사) 포함

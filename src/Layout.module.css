@@ -1,0 +1,61 @@
+.shell {
+  min-height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+  background: #1f2933;
+}
+
+.logo {
+  padding: 0 20px 16px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.link,
+.active {
+  padding: 10px 20px;
+  color: #cbd2d9;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.active {
+  color: #fff;
+  background: #323f4b;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  height: 56px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  font-size: 14px;
+}
+
+.logout {
+  background: none;
+  color: inherit;
+  border: 1px solid var(--line);
+}
+
+.main {
+  padding: 24px;
+}
