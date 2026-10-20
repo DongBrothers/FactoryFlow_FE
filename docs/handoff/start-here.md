@@ -84,7 +84,13 @@ API 의 정답은 백엔드 main 의 `docs/specs/`, `docs/specs/role-permissions
 | purchases | 🆕 공급업체 목록·등록·수정 | `GET·POST /api/purchases/suppliers`, `PUT …/{id}` | PURCHASE | 없음 |
 
 - 로그인 뒤 첫 화면: SALES → 주문 목록, PRODUCTION → 작업지시, PURCHASE → 부족 부품, ADMIN → 계정 발급
-- 조회(GET)는 업무 역할 3개 모두. ADMIN 은 계정 발급만 (업무 API 는 403)
+- **사이드바는 역할별로 자기 업무 메뉴만** (2026-10-21 결정). 숨긴 메뉴는 주소로도 못 들어간다 (Layout 이 첫 화면으로). 표는 src/app/menu.ts 한 곳
+  - SALES: 주문, 고객
+  - PRODUCTION: 작업지시 발행 대기, 작업지시, 설비 현황, 제품·BOM, 완성차·출고, 보관 위치, LOT 추적
+  - PURCHASE: 부족 부품, 구매, 부품 재고, 공급업체, LOT 추적
+  - ADMIN: 계정 발급
+  - LOT 추적이 둘인 이유: 불량 LOT 연락은 구매가 받고, 그 LOT 이 들어간 차의 출고를 멈추는 것은 생산이라서 (품질 역할이 따로 없음)
+  - 백엔드는 지금도 조회(GET)를 업무 역할 3개 모두에게 연다. 메뉴 숨김은 화면에서만 하는 것이라, 나중에 필요하면 menu.ts 표만 바꾼다
 - id → 이름: 작업지시·완성차·발행 대기의 `productId` 는 제품 목록, 주문의 `customerId` 는 고객 목록, 구매의 공급업체는 공급업체 목록으로 바꾼다
 - 발행 직후 작업지시가 아직 없을 수 있다 (mes 가 이벤트로 만듦, 404 WORK_ORDER_NOT_FOUND) → 잠시 뒤 다시 조회
 - 고객에게 보이는 상태: 발행 대기(READY)는 "접수", 첫 공정 시작부터 "생산 중"
