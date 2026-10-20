@@ -1,4 +1,4 @@
-import { toast } from './toast'
+import { toast } from '../layout/toast'
 
 export type Role = 'SALES' | 'PURCHASE' | 'PRODUCTION' | 'ADMIN'
 

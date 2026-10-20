@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate, useNavigate } from 'react-router'
-import { useAuth } from './auth'
-import { HOME } from './menu'
+import { useAuth } from './AuthProvider'
+import { HOME } from '../app/menu'
 import styles from './Login.module.css'
 
 export default function Login() {
