@@ -10,7 +10,7 @@ export default function Layout() {
 
   if (!role) return <Navigate to="/login" replace />
   const menu = menuOf(role)
-  const current = menu.find((m) => m.path === pathname)
+  const current = menu.flatMap((g) => g.items).find((m) => m.path === pathname)
   // 역할 메뉴에 없는 주소(ADMIN 이 업무 화면 등)는 그 역할의 첫 화면으로
   if (!current) return <Navigate to={HOME[role]} replace />
 
@@ -18,10 +18,15 @@ export default function Layout() {
     <div className={styles.shell}>
       <nav className={styles.sidebar}>
         <div className={styles.logo}>FactoryFlow</div>
-        {menu.map((m) => (
-          <NavLink key={m.path} to={m.path} className={({ isActive }) => (isActive ? styles.active : styles.link)}>
-            {m.label}
-          </NavLink>
+        {menu.map((g) => (
+          <div key={g.group} className={styles.group}>
+            <div className={styles.groupLabel}>{g.group}</div>
+            {g.items.map((m) => (
+              <NavLink key={m.path} to={m.path} className={({ isActive }) => (isActive ? styles.active : styles.link)}>
+                {m.label}
+              </NavLink>
+            ))}
+          </div>
         ))}
       </nav>
       <div className={styles.body}>
