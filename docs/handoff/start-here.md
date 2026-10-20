@@ -11,7 +11,7 @@
 | 2. dev 인프라 (CloudFront + S3, `https://dev.factoryflow.shop`) | 완료 |
 | 3. CI/CD (PR #2) | 완료. AI 리뷰는 화면 코드가 쌓인 뒤 프론트용 기준(security·quality)으로 |
 | 4. 폴더 구조, CLAUDE.md, lint 규칙, 훅 (chore/structure) | 이번 PR |
-| 5. Figma 고치기 (아래 4장의 "Figma 없음·수정") | 다음. Figma MCP 는 사용자가 `/mcp` 로 승인해야 읽힌다 |
+| 5. Figma 고치기 | 완료 (2026-10-21): 역할별 사이드바, /api/mes, 고객·수동 발행 문구, 완성차 위치 열, 새 흐름 H·I |
 | 6. 업무 화면 | 그다음 (9장 순서) |
 
 ## 사용자에 대해 (작업 방식)
@@ -59,29 +59,29 @@ API 의 정답은 백엔드 main 의 `docs/specs/`, `docs/specs/role-permissions
 
 ## 4. 화면 목록 (백엔드 main 기준)
 
-폴더는 CLAUDE.md "폴더 구조". Figma 열: 있음 / 수정(Figma 의 API·문구가 지금 백엔드와 다름) / 없음(새로 그려야 함)
+폴더는 CLAUDE.md "폴더 구조". Figma 열: 화면 번호 (2026-10-21 에 최신 백엔드 기준으로 고침·새로 그림. 흐름 H·I 가 새 화면)
 
 | 폴더 | 화면 | API | 쓰기 역할 | Figma |
 |---|---|---|---|---|
 | auth | 01 로그인 | `POST /api/auth/login` | - | 완료 (코드) |
 | auth | 02 계정 활성화 (`/activate?token=`), 02-e 링크 만료 | `POST /api/auth/activation` | 공개 | 있음 |
-| layout | 03 레이아웃 (사이드바, 상단 역할, 로그아웃) | `POST /api/auth/logout` | - | 수정 (메뉴가 13개로 늘어 구역으로 묶기) |
+| layout | 03 레이아웃 (사이드바, 상단 역할, 로그아웃) | `POST /api/auth/logout` | - | 역할별 사이드바 3종 |
 | admin | 04 계정 발급 | `POST /api/auth/admin/users` | ADMIN | 있음 |
-| orders | 05 주문 목록, 07 주문 상세 (+취소 모달, 취소 결과) | `GET /api/orders`, `GET …/{orderNo}`, `POST …/{orderNo}/cancel` | 취소 SALES | 수정 (고객 이름은 고객 목록으로 변환) |
-| orders | 06 주문 등록 (고객 선택, 제품·수량 여러 줄) | `POST /api/orders`, `GET /api/production/products`, 고객 `GET /api/orders/customers` | SALES | 수정 (고객 검색 API 없음 → 전체 목록을 화면에서 거름) |
-| orders | 🆕 고객 목록·등록 | `GET·POST /api/orders/customers` (`{name, contact}`) | 등록 SALES | 없음 |
-| production | 🆕 작업지시 발행 대기 | `GET /api/production/productions/awaiting-release`(CursorPage), `POST …/{productionId}/work-order`(202) | 발행 PRODUCTION | 없음 |
-| production | 🆕 제품·BOM 목록·상세·등록·수정 | `GET·POST /api/production/products`, `GET·PUT …/{productId}` | PRODUCTION | 없음 |
-| mes | 08 작업지시 목록, 09 상세 (공정 시작·종료) | `GET /api/mes/work-orders`, `GET …/{id}`, `POST …/{id}/steps/{process}/start`·`complete` | 공정 PRODUCTION | 수정 (`/api/production/…` → `/api/mes/…`) |
-| mes | 10 설비 현황 | `GET /api/mes/equipments?process=` (공정 5개 각각 불러 합침) | - | 수정 (주소) |
-| inventory | 11 완성차 목록·출고, 12 쓰인 부품 LOT 드로어 | `GET /api/inventory/finished-vehicles`(+`slotCode`), `POST …/{vin}/ship`, `GET …/{vin}/part-lots` | 출고 PRODUCTION | 수정 (보관 위치 열) |
-| inventory | 🆕 보관 위치 현황 (A·B 구역 40자리, 자리 대기 수) | `GET /api/inventory/storage-slots` | - | 없음 |
+| orders | 05 주문 목록, 07 주문 상세 (+취소 모달, 취소 결과) | `GET /api/orders`, `GET …/{orderNo}`, `POST …/{orderNo}/cancel` | 취소 SALES | 흐름 A |
+| orders | 06 주문 등록 (고객 선택, 제품·수량 여러 줄) | `POST /api/orders`, `GET /api/production/products`, 고객 `GET /api/orders/customers` | SALES | 흐름 A |
+| orders | 🆕 고객 목록·등록 | `GET·POST /api/orders/customers` (`{name, contact}`) | 등록 SALES | 흐름 I: 20, 20-1 |
+| production | 🆕 작업지시 발행 대기 | `GET /api/production/productions/awaiting-release`(CursorPage), `POST …/{productionId}/work-order`(202) | 발행 PRODUCTION | 흐름 H: 17, 17-1 |
+| production | 🆕 제품·BOM 목록·상세·등록·수정 | `GET·POST /api/production/products`, `GET·PUT …/{productId}` | PRODUCTION | 흐름 H: 18, 18-1 |
+| mes | 08 작업지시 목록, 09 상세 (공정 시작·종료) | `GET /api/mes/work-orders`, `GET …/{id}`, `POST …/{id}/steps/{process}/start`·`complete` | 공정 PRODUCTION | 흐름 B |
+| mes | 10 설비 현황 | `GET /api/mes/equipments?process=` (공정 5개 각각 불러 합침) | - | 흐름 C |
+| inventory | 11 완성차 목록·출고, 12 쓰인 부품 LOT 드로어 | `GET /api/inventory/finished-vehicles`(+`slotCode`), `POST …/{vin}/ship`, `GET …/{vin}/part-lots` | 출고 PRODUCTION | 흐름 E |
+| inventory | 🆕 보관 위치 현황 (A·B 구역 40자리, 자리 대기 수) | `GET /api/inventory/storage-slots` | - | 흐름 H: 19 |
 | inventory | 13 부품 재고 (+LOT 별 재고 드로어) | `GET /api/inventory/parts`, `GET …/{id}/lots` | - | 있음 |
-| inventory | 🆕 13 안: 부품 등록·수정, 재고 조정 모달 | `POST·PUT /api/inventory/parts`, `POST …/{id}/adjustments` (`{qty: ±, reason}`) | PURCHASE | 없음 |
+| inventory | 🆕 13 안: 부품 등록·수정, 재고 조정 모달 | `POST·PUT /api/inventory/parts`, `POST …/{id}/adjustments` (`{qty: ±, reason}`) | PURCHASE | 흐름 F 13 버튼, 흐름 I: 13-2, 13-3 |
 | inventory | 14 부족 부품 (+발주 모달) | `GET /api/inventory/parts/shortages`, `POST /api/purchases`, `GET /api/purchases/suppliers` | 발주 PURCHASE | 있음 |
 | inventory | 16 LOT 추적 | `GET /api/inventory/part-lots/{lotNo}/vehicles` | - | 있음 |
 | purchases | 15 구매 목록 (발주 중 / 입고 완료, +입고 모달) | `GET /api/purchases?status=`, `POST …/{id}/receive` | 입고 PURCHASE | 있음 |
-| purchases | 🆕 공급업체 목록·등록·수정 | `GET·POST /api/purchases/suppliers`, `PUT …/{id}` | PURCHASE | 없음 |
+| purchases | 🆕 공급업체 목록·등록·수정 | `GET·POST /api/purchases/suppliers`, `PUT …/{id}` | PURCHASE | 흐름 I: 21, 21-1 |
 
 - 로그인 뒤 첫 화면: SALES → 주문 목록, PRODUCTION → 작업지시, PURCHASE → 부족 부품, ADMIN → 계정 발급
 - **사이드바는 역할별로 자기 업무 메뉴만** (2026-10-21 결정). 숨긴 메뉴는 주소로도 못 들어간다 (Layout 이 첫 화면으로). 표는 src/app/menu.ts 한 곳
