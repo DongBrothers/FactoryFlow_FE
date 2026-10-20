@@ -6,12 +6,12 @@ const json = (status: number, body: unknown) => new Response(JSON.stringify(body
 const ok = (data: unknown) => json(200, { data, status: 200, message: 'ok' })
 const unauthorized = () => json(401, { code: 'UNAUTHORIZED', message: '로그인이 필요합니다.' })
 
-let api: typeof import('./api')
+let api: typeof import('./client')
 let fetchMock: ReturnType<typeof vi.fn>
 
 beforeEach(async () => {
   vi.resetModules() // 모듈 안의 토큰 상태를 테스트마다 비운다
-  api = await import('./api')
+  api = await import('./client')
   fetchMock = vi.fn()
   vi.stubGlobal('fetch', fetchMock)
 })

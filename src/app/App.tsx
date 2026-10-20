@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router'
-import { AuthProvider } from './auth'
-import Layout from './Layout'
-import Login from './Login'
-import { Toaster } from './toast'
+import { AuthProvider } from '../auth/AuthProvider'
+import Layout from '../layout/Layout'
+import Login from '../auth/Login'
+import { Toaster } from '../layout/toast'
 
 export default function App() {
   return (

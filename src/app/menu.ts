@@ -1,4 +1,4 @@
-import type { Role } from './api'
+import type { Role } from '../api/client'
 
 export const ROLE_LABEL: Record<Role, string> = {
   SALES: '영업',

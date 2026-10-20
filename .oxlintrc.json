@@ -1,8 +1,60 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
+  "plugins": [
+    "react",
+    "typescript",
+    "oxc"
+  ],
   "rules": {
     "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ],
+    "no-restricted-globals": [
+      "error",
+      {
+        "name": "fetch",
+        "message": "API 는 src/api/client.ts 의 api() 로만 부른다 (토큰·재발급·오류 토스트를 한 곳에서)"
+      },
+      {
+        "name": "localStorage",
+        "message": "토큰·업무 데이터를 브라우저 저장소에 두지 않는다 (Access 는 메모리에만)"
+      },
+      {
+        "name": "sessionStorage",
+        "message": "토큰·업무 데이터를 브라우저 저장소에 두지 않는다 (Access 는 메모리에만)"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/api/**"
+      ],
+      "rules": {
+        "no-restricted-globals": "off"
+      }
+    },
+    {
+      "files": [
+        "src/features/**"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "regex": "^\\.\\./[^.]",
+                "message": "다른 업무 영역(features/<영역>)을 직접 가져오지 않는다. 같이 쓰는 것은 src/shared/ 로 옮긴다"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

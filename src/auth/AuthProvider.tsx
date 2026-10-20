@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import * as api from './api'
-import type { Role } from './api'
+import * as api from '../api/client'
+import type { Role } from '../api/client'
 
 type Auth = {
   role: Role | null

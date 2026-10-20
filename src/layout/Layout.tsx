@@ -1,6 +1,6 @@
 import { Navigate, NavLink, useLocation, useNavigate } from 'react-router'
-import { useAuth } from './auth'
-import { HOME, menuOf, ROLE_LABEL } from './menu'
+import { useAuth } from '../auth/AuthProvider'
+import { HOME, menuOf, ROLE_LABEL } from '../app/menu'
 import styles from './Layout.module.css'
 
 export default function Layout() {
