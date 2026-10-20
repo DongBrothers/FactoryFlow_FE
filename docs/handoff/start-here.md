@@ -31,7 +31,7 @@
 > 영업이 주문·고객을 넣으면 → 차 한 대마다 생산 건과 부품 예약 → 모자라면 구매 담당이 발주·입고 → 부품이 다 모이면 **발행 대기** → 생산 담당이 작업지시 발행 → 현장(mes)에서 공정 5개(프레스·차체·도장은 로봇, 의장·검사는 사람) → 검사 양품이면 VIN → 완성차 창고의 자리(A·B 구역 40자리)에 자동 배정 → 출고
 
 백엔드 서비스: gateway, auth, order, production(계획: 생산 건, 제품·BOM), **mes**(실행: 작업지시, 공정, 설비, #135), inventory, purchase, simulator(설비 흉내, 내부)
-API 의 정답은 백엔드 main 의 `docs/specs/`, `docs/specs/role-permissions.md`. `docs/reference/backend-flow-implemented.md` 는 2026-10-18 사본이라 mes 분리 전이다 (참고만)
+API 의 정답은 백엔드 main 의 `docs/specs/`, `docs/specs/role-permissions.md` 와 컨트롤러 (예전 사본 docs/reference/backend-flow-implemented.md 는 낡아서 지움, git 기록에 남아 있다)
 
 ## 2. dev 인프라 (콘솔로 만듦)
 

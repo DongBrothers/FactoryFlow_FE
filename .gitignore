@@ -25,3 +25,6 @@ dist-ssr
 
 # Claude 훅 기록
 .claude/harness.log
+
+# Claude 
+.claude/launch.json
