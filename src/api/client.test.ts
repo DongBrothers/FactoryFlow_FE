@@ -68,3 +68,22 @@ test('로그인 실패(401)는 재발급하지 않고 서버 메시지를 그대
   await expect(api.login('a@gmail.com', 'x')).rejects.toThrow('이메일 또는 비밀번호가 맞지 않습니다.')
   expect(calls('/api/auth/token/refresh')).toHaveLength(0)
 })
+
+test('활성화는 토큰과 비밀번호를 보내고, 204 면 true', async () => {
+  fetchMock.mockResolvedValue(new Response(null, { status: 204 }))
+
+  expect(await api.activate('t1', 'pw-1234!')).toBe(true)
+  expect(JSON.parse(calls('/api/auth/activation')[0][1].body)).toEqual({ token: 't1', password: 'pw-1234!' })
+})
+
+test('활성화 링크가 만료됐거나 이미 쓰였으면(AUTH-004) false', async () => {
+  fetchMock.mockResolvedValue(json(400, { code: 'AUTH-004', message: '유효하지 않거나 만료된 활성화 토큰입니다.' }))
+
+  expect(await api.activate('old', 'pw')).toBe(false)
+})
+
+test('활성화의 다른 실패(409 이미 있는 계정)는 그대로 던진다', async () => {
+  fetchMock.mockResolvedValue(json(409, { code: 'AUTH-002', message: '이미 등록된 이메일입니다.' }))
+
+  await expect(api.activate('t1', 'pw')).rejects.toMatchObject({ status: 409, code: 'AUTH-002' })
+})

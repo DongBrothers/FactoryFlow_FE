@@ -92,3 +92,14 @@ export async function logout() {
   await api('/api/auth/logout', { method: 'POST' }).catch(() => {})
   accessToken = null
 }
+
+/** 메일 링크의 토큰으로 비밀번호를 정한다. 링크가 만료됐거나 이미 쓰였으면(AUTH-004) false */
+export async function activate(token: string, password: string): Promise<boolean> {
+  try {
+    await api('/api/auth/activation', { method: 'POST', body: JSON.stringify({ token, password }) })
+    return true
+  } catch (e) {
+    if (e instanceof ApiError && e.code === 'AUTH-004') return false
+    throw e
+  }
+}
