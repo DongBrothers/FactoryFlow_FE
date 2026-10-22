@@ -52,7 +52,6 @@
 
 .header {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
   gap: 16px;
   height: 56px;
@@ -60,6 +59,11 @@
   border-bottom: 1px solid var(--line);
   background: #fff;
   font-size: 14px;
+}
+
+.title {
+  margin: 0 auto 0 0;
+  font-size: 20px;
 }
 
 .logout {
