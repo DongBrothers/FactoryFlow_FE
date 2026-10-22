@@ -13,8 +13,14 @@ export class ApiError extends Error {
   }
 }
 
-// Access 토큰은 메모리에만 둔다. Refresh 는 httpOnly 쿠키(Path=/api/auth)라 JS 가 못 읽는다
-let accessToken: string | null = null
+// Access 토큰은 localStorage 에 둔다 (새로고침·다른 탭에서도 재발급 없이 쓰게).
+// Refresh 는 httpOnly 쿠키(Path=/api/auth)라 JS 가 못 읽는다
+const TOKEN_KEY = 'accessToken'
+const accessToken = () => localStorage.getItem(TOKEN_KEY)
+function setAccessToken(token: string | null) {
+  if (token) localStorage.setItem(TOKEN_KEY, token)
+  else localStorage.removeItem(TOKEN_KEY)
+}
 let refreshing: Promise<boolean> | null = null
 let onAuthLost = () => {}
 
@@ -23,19 +29,21 @@ export function setOnAuthLost(fn: () => void) {
   onAuthLost = fn
 }
 
-/** JWT 의 role 클레임. 서명 확인은 gateway 가 하므로 여기서는 화면 표시용으로만 읽는다 */
+/** JWT 의 role 클레임. 서명 확인은 gateway 가 하므로 여기서는 화면 표시용으로만 읽는다. 만료된 토큰이면 null */
 export function currentRole(): Role | null {
-  if (!accessToken) return null
-  const payload = accessToken.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')
-  return JSON.parse(atob(payload)).role
+  const token = accessToken()
+  if (!token) return null
+  const { role, exp } = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')))
+  return exp && exp * 1000 <= Date.now() ? null : role
 }
 
 function send(path: string, init: RequestInit) {
+  const token = accessToken()
   return fetch(path, {
     ...init,
     headers: {
       'Content-Type': 'application/json',
-      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+      ...(token && { Authorization: `Bearer ${token}` }),
       ...init.headers,
     },
   })
@@ -48,7 +56,7 @@ function send(path: string, init: RequestInit) {
 export function refresh(): Promise<boolean> {
   refreshing ??= fetch('/api/auth/token/refresh', { method: 'POST' })
     .then(async (res) => {
-      accessToken = res.ok ? (await res.json()).data.accessToken : null
+      setAccessToken(res.ok ? (await res.json()).data.accessToken : null)
       return res.ok
     })
     .catch(() => false)
@@ -84,13 +92,13 @@ export async function login(email: string, password: string): Promise<Role | nul
     method: 'POST',
     body: JSON.stringify({ email, password }),
   })
-  accessToken = data.accessToken
+  setAccessToken(data.accessToken)
   return currentRole()
 }
 
 export async function logout() {
   await api('/api/auth/logout', { method: 'POST' }).catch(() => {})
-  accessToken = null
+  setAccessToken(null)
 }
 
 /** 메일 링크의 토큰으로 비밀번호를 정한다. 링크가 만료됐거나 이미 쓰였으면(AUTH-004) false */
