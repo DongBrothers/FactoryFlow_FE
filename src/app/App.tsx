@@ -3,6 +3,7 @@ import { AuthProvider } from '../auth/AuthProvider'
 import Layout from '../layout/Layout'
 import Login from '../auth/Login'
 import ActivationPage from '../auth/ActivationPage'
+import IssueAccountPage from '../features/admin/IssueAccountPage'
 import { Toaster } from '../layout/toast'
 
 export default function App() {
@@ -12,7 +13,10 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/activate" element={<ActivationPage />} />
-          <Route path="*" element={<Layout />} />
+          <Route element={<Layout />}>
+            <Route path="/admin/users" element={<IssueAccountPage />} />
+            <Route path="*" element={<p>준비 중</p>} />
+          </Route>
         </Routes>
       </AuthProvider>
       <Toaster />

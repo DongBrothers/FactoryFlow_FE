@@ -1,4 +1,4 @@
-import { Navigate, NavLink, useLocation, useNavigate } from 'react-router'
+import { Navigate, NavLink, Outlet, useLocation, useNavigate } from 'react-router'
 import { useAuth } from '../auth/AuthProvider'
 import { HOME, menuOf, ROLE_LABEL } from '../app/menu'
 import styles from './Layout.module.css'
@@ -31,6 +31,7 @@ export default function Layout() {
       </nav>
       <div className={styles.body}>
         <header className={styles.header}>
+          <h1 className={styles.title}>{current.label}</h1>
           {/* 이름은 GET /api/auth/me 가 생기면 붙인다 */}
           <span>{ROLE_LABEL[role]}</span>
           <button
@@ -44,8 +45,7 @@ export default function Layout() {
           </button>
         </header>
         <main className={styles.main}>
-          <h1>{current.label}</h1>
-          <p>준비 중</p>
+          <Outlet />
         </main>
       </div>
     </div>
