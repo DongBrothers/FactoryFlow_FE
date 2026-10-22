@@ -1,9 +1,10 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  test: { setupFiles: ['src/test-setup.ts'] },
   server: {
     proxy: {
       // 기본은 dev 백엔드. 로컬 gateway 로 붙으려면 API_TARGET=http://localhost:8080 npm run dev

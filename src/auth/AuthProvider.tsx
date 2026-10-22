@@ -11,16 +11,22 @@ type Auth = {
 const AuthContext = createContext<Auth | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [role, setRole] = useState<Role | null>(null)
-  const [ready, setReady] = useState(false)
+  // 저장된 Access 가 살아 있으면 재발급 없이 바로 시작한다
+  const [role, setRole] = useState<Role | null>(api.currentRole)
+  const [ready, setReady] = useState(role !== null)
 
   useEffect(() => {
     api.setOnAuthLost(() => setRole(null))
-    // 새로고침하면 메모리의 Access 가 사라지므로 쿠키로 한 번 재발급을 시도한다
-    api.refresh().then(() => {
-      setRole(api.currentRole())
-      setReady(true)
-    })
+    // 다른 탭에서 로그인·로그아웃해 저장된 토큰이 바뀌면 이 탭도 따라간다
+    const sync = () => setRole(api.currentRole())
+    addEventListener('storage', sync)
+    // 없거나 만료됐으면 쿠키로 한 번 재발급을 시도한다
+    if (!api.currentRole())
+      api.refresh().then(() => {
+        sync()
+        setReady(true)
+      })
+    return () => removeEventListener('storage', sync)
   }, [])
 
   const login = async (email: string, password: string) => {

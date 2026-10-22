@@ -21,11 +21,11 @@
       },
       {
         "name": "localStorage",
-        "message": "토큰·업무 데이터를 브라우저 저장소에 두지 않는다 (Access 는 메모리에만)"
+        "message": "브라우저 저장소는 src/api/client.ts 만 쓴다 (Access 토큰). 업무 데이터는 저장하지 않는다"
       },
       {
         "name": "sessionStorage",
-        "message": "토큰·업무 데이터를 브라우저 저장소에 두지 않는다 (Access 는 메모리에만)"
+        "message": "브라우저 저장소는 src/api/client.ts 만 쓴다 (Access 토큰). 업무 데이터는 저장하지 않는다"
       }
     ]
   },
