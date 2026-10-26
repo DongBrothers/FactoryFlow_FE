@@ -13,6 +13,9 @@ export class ApiError extends Error {
   }
 }
 
+/** 백엔드 id 커서 목록 (작업지시, 발행 대기, 구매). 다음 페이지는 nextCursor 를 lastId 로 넘긴다 */
+export type CursorPage<T> = { items: T[]; count: number; last: boolean; nextCursor: number | null }
+
 // Access 토큰은 localStorage 에 둔다 (새로고침·다른 탭에서도 재발급 없이 쓰게).
 // Refresh 는 httpOnly 쿠키(Path=/api/auth)라 JS 가 못 읽는다
 const TOKEN_KEY = 'accessToken'
