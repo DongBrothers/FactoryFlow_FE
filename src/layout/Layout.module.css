@@ -75,3 +75,8 @@
 .main {
   padding: 24px;
 }
+
+.notice {
+  padding: 40px;
+  text-align: center;
+}

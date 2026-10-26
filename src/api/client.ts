@@ -66,11 +66,13 @@ export function refresh(): Promise<boolean> {
   return refreshing
 }
 
+const PUBLIC_AUTH = ['/api/auth/login', '/api/auth/activation', '/api/auth/token/refresh', '/api/auth/logout']
+
 /** 성공하면 응답의 data, 실패하면 message 를 토스트로 띄우고 ApiError 를 던진다 */
 export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   let res = await send(path, init)
-  // /api/auth/* 의 401 은 로그인 실패 같은 업무 오류라 재발급하지 않는다
-  if (res.status === 401 && !path.startsWith('/api/auth/')) {
+  // 공개 인증 API 의 401 은 로그인 실패 같은 업무 오류라 재발급하지 않는다
+  if (res.status === 401 && !PUBLIC_AUTH.includes(path)) {
     if (await refresh()) {
       res = await send(path, init)
     } else {
@@ -95,6 +97,11 @@ export async function login(email: string, password: string): Promise<Role | nul
   setAccessToken(data.accessToken)
   return currentRole()
 }
+
+/** 내 정보. 상단 이름과 메뉴(권한)를 고른다 */
+export type MyAccount = { publicId: string; name: string; role: Role; permissions: string[] }
+
+export const me = () => api<MyAccount>('/api/auth/me')
 
 export async function logout() {
   await api('/api/auth/logout', { method: 'POST' }).catch(() => {})

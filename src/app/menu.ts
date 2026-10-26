@@ -50,7 +50,7 @@ const MENU: Record<Role, MenuGroup[]> = {
     {
       group: '자재·구매',
       items: [
-        { path: '/shortages', label: '부족 부품' },
+        { path: '/suggestions', label: '발주 제안' },
         { path: '/purchases', label: '구매·입고' },
         { path: '/parts', label: '부품 재고' },
         { path: '/suppliers', label: '공급업체' },
@@ -58,15 +58,38 @@ const MENU: Record<Role, MenuGroup[]> = {
     },
     LOT,
   ],
-  ADMIN: [{ group: '관리자', items: [{ path: '/admin/users', label: '계정 발급' }] }],
+  ADMIN: [],
 }
 
-export const menuOf = (role: Role) => MENU[role]
+const ADMIN_MENU: MenuGroup = {
+  group: '관리자',
+  items: [
+    { path: '/admin/users', label: '계정 발급' },
+    { path: '/admin/roles', label: '역할·권한' },
+  ],
+}
+
+/**
+ * 메뉴는 GET /api/auth/me 의 permissions 로 고른다 (관리자가 역할의 권한을 바꿀 수 있어서).
+ * READ 면 자기 역할의 업무 메뉴, ACCOUNT_ADMIN 이면 관리자 메뉴
+ */
+export function menuOf(role: Role, permissions: string[]): MenuGroup[] {
+  return [
+    ...(permissions.includes('READ') ? (MENU[role] ?? []) : []),
+    ...(permissions.includes('ACCOUNT_ADMIN') ? [ADMIN_MENU] : []),
+  ]
+}
 
 /** 로그인 뒤 첫 화면 */
 export const HOME: Record<Role, string> = {
   SALES: '/orders',
   PRODUCTION: '/work-orders',
-  PURCHASE: '/shortages',
+  PURCHASE: '/suggestions',
   ADMIN: '/admin/users',
+}
+
+/** 첫 화면: 역할의 첫 화면이 메뉴에 있으면 그것, 없으면 보이는 첫 메뉴. 메뉴가 없으면 null */
+export function homeOf(role: Role, permissions: string[]): string | null {
+  const paths = menuOf(role, permissions).flatMap((g) => g.items.map((m) => m.path))
+  return paths.includes(HOME[role]) ? HOME[role] : (paths[0] ?? null)
 }
