@@ -1,13 +1,17 @@
-import { useState, type FormEvent } from 'react'
-import type { Role } from '../../api/client'
-import { ROLE_LABEL } from '../../app/menu'
+import { useEffect, useState, type FormEvent } from 'react'
 import { toast } from '../../layout/toast'
-import { issueAccount } from './api'
+import { getRoles, issueAccount, type Role } from './api'
 import styles from './IssueAccountPage.module.css'
 
 /** 04 계정 발급. ADMIN 전용 */
 export default function IssueAccountPage() {
   const [submitting, setSubmitting] = useState(false)
+  const [roles, setRoles] = useState<Role[]>([])
+
+  useEffect(() => {
+    // 실패 메시지는 api 가 토스트로 띄운다
+    getRoles().then(setRoles, () => {})
+  }, [])
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -18,7 +22,7 @@ export default function IssueAccountPage() {
       const issued = await issueAccount({
         email: String(data.get('email')),
         name: String(data.get('name')),
-        role: data.get('role') as Role,
+        role: String(data.get('role')),
       })
       toast(`${issued.email} 로 활성화 메일을 보냈습니다`)
       form.reset() // 다음 사람을 바로 발급할 수 있게
@@ -46,9 +50,9 @@ export default function IssueAccountPage() {
           <option value="" disabled>
             선택
           </option>
-          {(Object.keys(ROLE_LABEL) as Role[]).map((role) => (
-            <option key={role} value={role}>
-              {ROLE_LABEL[role]} {role}
+          {roles.map((role) => (
+            <option key={role.code} value={role.code}>
+              {role.name} {role.code}
             </option>
           ))}
         </select>

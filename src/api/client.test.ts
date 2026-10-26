@@ -71,6 +71,16 @@ test('로그인 실패(401)는 재발급하지 않고 서버 메시지를 그대
   expect(calls('/api/auth/token/refresh')).toHaveLength(0)
 })
 
+test('로그인이 필요한 /api/auth 요청(내 정보 등)의 401 은 재발급한다', async () => {
+  fetchMock.mockImplementation(async (path: string, init: RequestInit) => {
+    if (path === '/api/auth/token/refresh') return ok({ accessToken: jwt('SALES') })
+    return (init.headers as Record<string, string>).Authorization ? ok({ name: '김영업' }) : unauthorized()
+  })
+
+  expect(await api.me()).toEqual({ name: '김영업' })
+  expect(calls('/api/auth/token/refresh')).toHaveLength(1)
+})
+
 test('활성화는 토큰과 비밀번호를 보내고, 204 면 true', async () => {
   fetchMock.mockResolvedValue(new Response(null, { status: 204 }))
 
