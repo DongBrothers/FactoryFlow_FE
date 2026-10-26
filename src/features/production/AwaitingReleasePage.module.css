@@ -1,0 +1,78 @@
+.poll {
+  margin: 0 0 20px;
+  color: #6b7280;
+  font-size: 12px;
+  text-align: right;
+}
+
+.table {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  font-size: 14px;
+}
+
+.table th {
+  padding: 10px 16px;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.table td {
+  padding: 12px 16px;
+  border-top: 1px solid var(--line);
+}
+
+.wide {
+  width: 45%;
+}
+
+.empty {
+  color: #6b7280;
+  text-align: center;
+}
+
+.more {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.secondary {
+  border: 1px solid var(--line);
+  background: #fff;
+  color: inherit;
+}
+
+.modal {
+  width: 560px;
+  box-sizing: border-box;
+  padding: 28px;
+  border: 0;
+  border-radius: 12px;
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 0.3);
+}
+
+.modalTitle {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+.modalText {
+  margin: 0 0 16px;
+  color: #4b5563;
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}

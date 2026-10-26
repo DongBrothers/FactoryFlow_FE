@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import type { Role } from '../api/client'
-import { HOME, homeOf, menuOf } from './menu'
+import { canSee, HOME, homeOf, menuOf } from './menu'
 
 const labels = (role: Role, permissions: string[]) => menuOf(role, permissions).flatMap((g) => g.items.map((m) => m.label))
 
@@ -33,6 +33,12 @@ test('첫 화면은 역할의 첫 화면이고, 그 메뉴가 없으면 보이�
   expect(homeOf('SALES', ['READ', 'ACCOUNT_ADMIN'])).toBe('/orders')
   expect(homeOf('SALES', ['ACCOUNT_ADMIN'])).toBe('/admin/users')
   expect(homeOf('SALES', [])).toBeNull()
+})
+
+test('쓰기 버튼은 역할이 아니라 권한으로 보인다 (Figma 00 쓰기 버튼)', () => {
+  expect(canSee(['READ', 'PRODUCTION_WRITE'], 'releaseWorkOrder')).toBe(true)
+  expect(canSee(['READ'], 'releaseWorkOrder')).toBe(false)
+  expect(canSee(['READ', 'ORDER_WRITE'], 'releaseWorkOrder')).toBe(false)
 })
 
 test('처음 권한 그대로면 첫 화면은 그 역할의 메뉴 안에 있다', () => {

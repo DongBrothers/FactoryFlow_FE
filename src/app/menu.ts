@@ -93,3 +93,11 @@ export function homeOf(role: Role, permissions: string[]): string | null {
   const paths = menuOf(role, permissions).flatMap((g) => g.items.map((m) => m.path))
   return paths.includes(HOME[role]) ? HOME[role] : (paths[0] ?? null)
 }
+
+/** 쓰기 버튼을 보일 권한 (Figma 00 쓰기 버튼). 화면은 숨기기만 하고 막는 것은 gateway 가 한다 */
+const BUTTON_PERMISSION = {
+  releaseWorkOrder: 'PRODUCTION_WRITE',
+} as const
+
+export const canSee = (permissions: string[], button: keyof typeof BUTTON_PERMISSION) =>
+  permissions.includes(BUTTON_PERMISSION[button])
